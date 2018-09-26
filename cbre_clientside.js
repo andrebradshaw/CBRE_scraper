@@ -52,11 +52,11 @@ function getDataFromHTML() {
     var email = cleanup(validate(leads[i].getElementsByClassName("icon-link email"), 0, "href").replace(/mailto:/, ''));
 
 
-    containArr.push(new Array(firstname, lastname, title, city, phone, email))
+    containArr.push(new Array(firstname, lastname, title, city, phone, email)+'\r')
   }
+console.log(containArr);
 }
 
-//now we need to build a function to loop through the pages.
 
 
 function pager() {
@@ -74,4 +74,15 @@ function pager() {
   }
 }
 
-pager()
+for(c=0; c<numberOfPages; c++){
+	var scrapePage = new Promise(resolve =>{
+		resolve(getDataFromHTML());
+	});	
+	scrapePage.then(pager());
+}
+
+//we will finish this later. The last step is to pass an argument through the getDataFromHTML() function which will let it know that the page loop is complete, and it can then download the data as a CSV.  
+
+
+
+
