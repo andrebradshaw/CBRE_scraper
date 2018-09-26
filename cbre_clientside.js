@@ -1,5 +1,3 @@
-//hmm.. i think that worked without the need for an await function. which is good, because that is complex to explain.
-
 function dl(filename, text) { //this function will download the data into a csv
   var elmi = document.createElement('a');
   elmi.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -13,11 +11,11 @@ function dl(filename, text) { //this function will download the data into a csv
   document.body.removeChild(elmi);
 }
 
-function unq(arrgh){ //takes an array and filters out duplicates by identifying the index of each uniq value and returning only the first instance. 
-        return arrgh.filter((elm,pos,arr) =>{    
-                return arr.indexOf(elm) == pos;  
-                });
-        }
+function unq(arrgh) { //takes an array and filters out duplicates by identifying the index of each uniq value and returning only the first instance. 
+  return arrgh.filter((elm, pos, arr) => {
+    return arr.indexOf(elm) == pos;
+  });
+}
 
 function cleanup(elm) {
   return elm.replace(/,|\?|\#/g, '').replace(/&/g, 'and').replace(/\n|\r/g, ' _ ');
@@ -73,12 +71,12 @@ function getDataFromHTML(currentPage) {
     var email = cleanup(validate(leads[i].getElementsByClassName("icon-link email"), 0, "href").replace(/mailto:/, ''));
 
 
-    containArr.push(new Array(firstname, lastname, title, city, phone, email)+'\r')
+    containArr.push(new Array(firstname, lastname, title, city, phone, email) + '\r')
   }
-	if(currentPage == (numberOfPages-1)){
-		var output = 'first_name,last_name,title,city,phone,email\r'+unq(containArr).toString();
-		dl("CBRE_list.csv", output)
-	}
+  if (currentPage == (numberOfPages - 1)) {
+    var output = 'first_name,last_name,title,city,phone,email\r' + unq(containArr).toString();
+    dl("CBRE_list.csv", output)
+  }
 }
 
 
@@ -97,10 +95,9 @@ function pager() {
   }
 }
 
-for(c=0; c<numberOfPages; c++){
-	var scrapePage = new Promise(resolve =>{
-		resolve(getDataFromHTML(c));
-	});	
-	scrapePage.then(pager());
+for (c = 0; c < numberOfPages; c++) {
+  var scrapePage = new Promise(resolve => {
+    resolve(getDataFromHTML(c));
+  });
+  scrapePage.then(pager());
 }
-
